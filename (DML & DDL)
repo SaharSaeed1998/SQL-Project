@@ -1,0 +1,93 @@
+-- CREATE DATABASE
+create database store;
+
+-- CREATE TABLES
+use store;
+create table countries(
+code int primary key ,
+name varchar(20) unique ,
+continent_name varchar(20) not null
+);
+
+use store;
+create table users(
+id int primary key,
+full_name varchar(20),
+email varchar(20) unique ,
+gender char(1) check(gender= 'm' or gender ='f'),
+date_of_birth varchar(15),
+country_code int ,
+created_at datetime default current_timestamp ,
+foreign key (country_code) references countries(code)
+);
+
+
+use store; 
+create table orders(
+id int primary key,
+status varchar(6)check(status= 'start' or status ='finish'),
+user_id int,
+created_at datetime default current_timestamp,
+foreign key (user_id) references users(id)
+);
+
+use store;
+create table products(
+id int primary key,
+name varchar(10) not null,
+price int default 0,
+status varchar(10) check(status= 'vaild' or status ='expired'),
+created_at datetime default current_timestamp
+);
+
+use store;
+create table order_products(
+order_id int, 
+product_id varchar(20),
+quantity int default 0,
+foreign key (order_id) references orders(id),
+foreign key (product_id) references products(id)
+);
+
+
+-- MDL Commands
+
+-- Add Row
+use store;
+insert into countries 
+values (966, "Saudi Arabia", "Africa");
+select * from countries;
+
+use store;
+insert into users 
+values (2, 'Sahar Saeed', 'saharsaeed1998@gmail.com', 'F', '1-8-1998', 966, current_timestamp());
+select * from users;
+
+use store;
+insert into orders 
+values (46,'start',53,current_timestamp());
+select * from orders;
+
+
+use store;
+insert into products
+values(343,'books',25,'vaild');
+select * from products;
+
+
+use store;
+insert into order_products
+values (342,20,14);
+select * from order_products;
+
+-- Update Row
+use store;
+update countries
+set continent_name = "Asia"
+where code = 966;
+select * from countries;
+
+-- Delete Row
+use store;
+delete from products where id = 343;
+select * from products;
